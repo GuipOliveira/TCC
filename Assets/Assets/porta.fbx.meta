@@ -1,32 +1,31 @@
 fileFormatVersion: 2
-guid: 05d8145a873b7fb479b95b40ca60c24e
-timeCreated: 1491851942
+guid: 13fa9cf20bacd2d4890b91175e15f2e9
+timeCreated: 1492402170
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Door Door1
-    100002: Door Frame
-    100004: //RootNode
-    100006: Wall Elektric
-    100008: Wall Elektric1
-    400000: Door Door1
-    400002: Door Frame
-    400004: //RootNode
-    400006: Wall Elektric
-    400008: Wall Elektric1
-    2300000: Door Door1
-    2300002: Door Frame
+    100000: Camera
+    100002: Lamp
+    100004: Porta
+    100006: //RootNode
+    100008: PortaFrame
+    100010: Wall Elektric
+    400000: Camera
+    400002: Lamp
+    400004: Porta
+    400006: //RootNode
+    400008: PortaFrame
+    400010: Wall Elektric
+    2300000: Porta
+    2300002: PortaFrame
     2300004: Wall Elektric
-    2300006: Wall Elektric1
-    3300000: Door Door1
-    3300002: Door Frame
+    3300000: Porta
+    3300002: PortaFrame
     3300004: Wall Elektric
-    3300006: Wall Elektric1
-    4300000: Door Door1
-    4300002: Door Frame
+    4300000: Porta
+    4300002: PortaFrame
     4300004: Wall Elektric
-    4300006: Wall Elektric1
   materials:
     importMaterials: 1
     materialName: 0

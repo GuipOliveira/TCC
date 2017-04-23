@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9cb47dd8cab432d41a73400c80209db9
-timeCreated: 1491780051
+guid: bab8a73ff66f16444901fe7dc4b80164
+timeCreated: 1492396410
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Plane.001
+    4300000: Piso
   materials:
     importMaterials: 1
     materialName: 0
