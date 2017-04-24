@@ -75,6 +75,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\ChecarMaterial.cs" />
     <Compile Include="Assets\Scripts\Pegavel.cs" />
     <Compile Include="Assets\Scripts\PickUp.cs" />
   </ItemGroup>
