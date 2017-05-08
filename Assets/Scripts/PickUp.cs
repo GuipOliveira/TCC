@@ -24,13 +24,65 @@ public class PickUp: MonoBehaviour
     {
         if (isCarregando)
         {
+
             carregar(objCarregado);
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                transferir();
+            }
             isSolto();
         }
         else
         {
+            int x = Screen.width / 2;
+            int y = Screen.height / 2;
+
             pegar();
         }
+    }
+
+    void transferir()
+    {
+        Debug.LogWarning(objCarregado.ToString());
+
+        if(objCarregado.ToString().Contains("radio"))
+        {
+            Debug.LogWarning("Transferindo Radio");
+            isCarregando = false;
+            objCarregado.SetActive(false);
+            dropObj();
+            PassaValor.idOBJ = 1;
+            
+
+        }
+        else if (objCarregado.ToString().Contains("BolaGO"))
+        {
+            isCarregando = false;
+            objCarregado.SetActive(false);
+            dropObj();
+            PassaValor.idOBJ = 2;
+
+        }
+
+        /*switch (objCarregado.ToString())
+            {
+                case "radio":
+                Debug.LogWarning("Transferindo Radio");
+                    isCarregando = false;
+                    objCarregado.SetActive(false);
+                    PassaValor.idOBJ = 1;
+                    break;
+                case "BolaGO":
+                    isCarregando = false;
+                    objCarregado.SetActive(false);
+                    PassaValor.idOBJ = 2;
+                    break;
+
+            }
+           */
+
+
+
     }
 
     void carregar(GameObject obj)
@@ -45,12 +97,15 @@ public class PickUp: MonoBehaviour
         {
             int x = Screen.width / 2;
             int y = Screen.height / 2;
-
+         
             Ray ray = mainCamera.GetComponent<Camera>().ScreenPointToRay(new Vector3(x, y));
             RaycastHit hit;
+            Debug.LogWarning("Colisor: " + Physics.Raycast(ray, out hit));
             if (Physics.Raycast(ray, out hit))
             {
+                Debug.LogWarning("Pegando 1");
                 Pegavel p = hit.collider.GetComponent<Pegavel>();
+      
                 if (p != null)
                 {
                     isCarregando = true;
