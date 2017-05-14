@@ -8,13 +8,14 @@ public class PickUp: MonoBehaviour
     public GameObject objCarregado;
 
     public bool isCarregando;
-
+    public Transferencia trans;
     public float distancia;
     public float smooth;
 
     // Use this for initialization
     void Start()
     {
+        trans = new Transferencia();
         mainCamera = GameObject.FindWithTag("MainCamera");
 
     }
@@ -28,7 +29,11 @@ public class PickUp: MonoBehaviour
             carregar(objCarregado);
             if (Input.GetKeyDown(KeyCode.R))
             {
-                transferir();
+                trans.transferir(objCarregado);
+                objCarregado.SetActive(false);
+                dropObj();
+  
+                
             }
             isSolto();
         }
@@ -41,49 +46,9 @@ public class PickUp: MonoBehaviour
         }
     }
 
-    void transferir()
-    {
-        Debug.LogWarning(objCarregado.ToString());
-
-        if(objCarregado.ToString().Contains("radio"))
-        {
-            Debug.LogWarning("Transferindo Radio");
-            isCarregando = false;
-            objCarregado.SetActive(false);
-            dropObj();
-            PassaValor.idOBJ = 1;
-            
-
-        }
-        else if (objCarregado.ToString().Contains("BolaGO"))
-        {
-            isCarregando = false;
-            objCarregado.SetActive(false);
-            dropObj();
-            PassaValor.idOBJ = 2;
-
-        }
-
-        /*switch (objCarregado.ToString())
-            {
-                case "radio":
-                Debug.LogWarning("Transferindo Radio");
-                    isCarregando = false;
-                    objCarregado.SetActive(false);
-                    PassaValor.idOBJ = 1;
-                    break;
-                case "BolaGO":
-                    isCarregando = false;
-                    objCarregado.SetActive(false);
-                    PassaValor.idOBJ = 2;
-                    break;
-
-            }
-           */
 
 
-
-    }
+    
 
     void carregar(GameObject obj)
     {
