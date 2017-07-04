@@ -46,9 +46,11 @@ public class Sala : MonoBehaviour {
      void addObj()
     {
         Debug.LogWarning("Add objetos");
-        objetos = new GameObject[2];//alterar tamanho conforme adição de objetos transportaves
-        objetos[0] = GameObject.Find("radio");
-        objetos[1] = GameObject.Find("BolaGO");
+        // objetos = new GameObject[2];//alterar tamanho conforme adição de objetos transportaves
+        //objetos[0] = GameObject.Find("radio");
+        //objetos[1] = GameObject.Find("BolaGO");
+        objetos = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+    
     }
 
 
@@ -62,9 +64,10 @@ public class Sala : MonoBehaviour {
         {
             if(idObj == go.name)//Necessário ter o mesmo game objects na mesma sala, mesmo que estejam inativos
             {
-              
-                Instantiate(go);//Radio gigante...pq?????
-                go.SetActive(true);
+            
+                GameObject Clone = Instantiate(go,new Vector3(-3.56f, 2.36f, -2.93f),new Quaternion(0f, 90.00001f,0f,0f));//Radio gigante...pq?????
+             
+                Clone.SetActive(true);
             }
         }
         
@@ -72,6 +75,7 @@ public class Sala : MonoBehaviour {
         
 
     }
+
 
 
 

@@ -82,12 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\ChecarMaterial.cs" />
-    <Compile Include="Assets\Scripts\ConexaoSocketIO.cs" />
     <Compile Include="Assets\Scripts\PassaValor.cs" />
     <Compile Include="Assets\Scripts\Pegavel.cs" />
     <Compile Include="Assets\Scripts\PickUp.cs" />
     <Compile Include="Assets\Scripts\PlayerConnection.cs" />
     <Compile Include="Assets\Scripts\Sala.cs" />
+    <Compile Include="Assets\Scripts\Transferencia.cs" />
     <Compile Include="Assets\SocketIO\JSONObject\JSONObject.cs" />
     <Compile Include="Assets\SocketIO\JSONObject\JSONTemplates.cs" />
     <Compile Include="Assets\SocketIO\JSONObject\VectorTemplates.cs" />
