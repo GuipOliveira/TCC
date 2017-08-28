@@ -90,6 +90,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\ApertaBotao.cs" />
     <Compile Include="Assets\Scripts\ChecarMaterial.cs" />
     <Compile Include="Assets\Scripts\ControlaPortaAnimacao.cs" />
     <Compile Include="Assets\Scripts\ControleGeralPorta.cs" />

@@ -11,16 +11,21 @@ public class ControleGeralPorta : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+ 
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void Awake()
+    {
+    }
+
+    // Update is called once per frame
+    void Update () {
+        gameObject.GetComponent<TocarAudio>().ativo = true;
+        gameObject.GetComponentInChildren<TocarAudio>().ativo = true;
         if (controleGeral)
         {
-            gameObject.GetComponentInChildren<TocarAudio>().ativo = true;
-            gameObject.GetComponent<ControlaPortaAnimacao>().ativar = true;
-            gameObject.GetComponent<TocarAudio>().ativo = true;
+            gameObject.GetComponent<ControlaPortaAnimacao>().ativar = true;          
+            gameObject.GetComponent<TocarAudio>().ativo = false;
             gameObject.GetComponentInChildren<TrocaCorLuz>().ativo = true;
             gameObject.GetComponentInChildren<TocarAudio>().ativo = false;
 
