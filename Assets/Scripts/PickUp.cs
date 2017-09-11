@@ -75,7 +75,6 @@ public class PickUp: MonoBehaviour
                 {
                     isCarregando = true;
                     objCarregado = p.gameObject;
-                    //p.gameObject.GetComponent<Rigidbody>().isKinematic = false;
                     p.gameObject.GetComponent<Rigidbody>().useGravity = false;
                 }
             }
@@ -93,7 +92,6 @@ public class PickUp: MonoBehaviour
     void dropObj()
     {
         isCarregando = false;
-        //objCarregado.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         objCarregado.gameObject.GetComponent<Rigidbody>().useGravity = true;
         objCarregado = null;
     }

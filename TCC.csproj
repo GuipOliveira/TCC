@@ -90,13 +90,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Acender.cs" />
+    <Compile Include="Assets\Scripts\AcenderQuadrado.cs" />
+    <Compile Include="Assets\Scripts\AcenderRay.cs" />
     <Compile Include="Assets\Scripts\ApertaBotao.cs" />
+    <Compile Include="Assets\Scripts\Apertar.cs" />
     <Compile Include="Assets\Scripts\ChecarMaterial.cs" />
     <Compile Include="Assets\Scripts\ControlaPortaAnimacao.cs" />
     <Compile Include="Assets\Scripts\ControleGeralPorta.cs" />
+    <Compile Include="Assets\Scripts\HitBoxMapa.cs" />
+    <Compile Include="Assets\Scripts\Laser.cs" />
+    <Compile Include="Assets\Scripts\Lazer.cs" />
+    <Compile Include="Assets\Scripts\MaquinaEstadosBotao.cs" />
     <Compile Include="Assets\Scripts\PassaValor.cs" />
     <Compile Include="Assets\Scripts\Pegavel.cs" />
     <Compile Include="Assets\Scripts\PickUp.cs" />
+    <Compile Include="Assets\Scripts\PiscaCntroller.cs" />
+    <Compile Include="Assets\Scripts\Piscar.cs" />
     <Compile Include="Assets\Scripts\PlayerConnection.cs" />
     <Compile Include="Assets\Scripts\Sala.cs" />
     <Compile Include="Assets\Scripts\TocarAudio.cs" />
