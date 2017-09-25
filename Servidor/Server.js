@@ -25,7 +25,8 @@ io.on('connection', function(socket){
 			sessao:player.sessao,
 			players:0,
 			flgEnvio:0,
-			idObj:0
+			idObj:0,
+			porta:-1
 		}
 		
 		for(i = 0; i < clients.length; i++){
@@ -83,19 +84,38 @@ io.on('connection', function(socket){
 		}
 	});
 	
-	/*Método responsável por verificar se existe algum objeto enviado*/
+	/*Método responsável por verificar se existe algum sinal porta enviado*/
 	socket.on('AGUARDAR', function(player){
+
 		for(i = 0; i < clients.length; i++){
 			if(clients[i].sessao == player.sessao && clients[i].id != player.id) //verifica o outro usuário conectado a mesma sessão
 			{
-				if(clients[i].flgEnvio == 1)//se a flag estiver ativa, significa que o outro usuário enviou um objeto
+				if(clients[i].flgEnvio == 1)//se a flag estiver ativa, significa que o outro usuário enviou um sinal da porta 
 				{
-					console.log('[INFO] Player ' + player.id + ' recebendo objeto!');
+					console.log('[INFO] Player ' + player.id + ' recebendo sinal porta!');
 					clients[i].flgEnvio = 0;
 					
-					socket.emit('RECEBE_OBJ',clients[i]);
+					socket.emit('RECEBE_SINALPORTA',clients[i]);
 					i = clients.length;
 				}
+			}
+		}
+	
+	});
+	
+	
+		/*Método responsável por troca de sinais para abertura de portas*/
+	socket.on('SINALPORTA', function(player){
+		for(i = 0; i < clients.length; i++){
+			if(clients[i].sessao == player.sessao && clients[i].id == player.id) //verifica usuário conectado a sessão
+			{
+					clients[i].porta = player.porta;
+
+					console.log('[INFO] Player ' + player.id + ' enviando sinal Porta!');
+					clients[i].flgEnvio = 1; //sinaliza que o usuário esta enviando um objeto
+					clients[i].porta = player.porta;
+					i = clients.length;
+				
 			}
 		}
 	

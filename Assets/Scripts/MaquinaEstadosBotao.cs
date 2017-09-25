@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MaquinaEstadosBotao : MonoBehaviour {
+public class MaquinaEstadosBotao : MonoBehaviour
+{
 
     public bool ativar;
     public ApertaBotao[] _apertaBotao;
@@ -13,7 +14,8 @@ public class MaquinaEstadosBotao : MonoBehaviour {
     public bool valendo;
 
     // Use this for initialization
-    void Start() {       
+    void Start()
+    {
         ap = player.GetComponent<Apertar>();
         cpa = _porta.GetComponent<ControlaPortaAnimacao>();
         _apertaBotao = GetComponentsInChildren<ApertaBotao>();
@@ -26,7 +28,7 @@ public class MaquinaEstadosBotao : MonoBehaviour {
             StartCoroutine(Espera());
             botao.Desligar();
         }
-        ativar = false;    
+        ativar = false;
     }
 
     bool Acessa(int indice)
@@ -34,10 +36,10 @@ public class MaquinaEstadosBotao : MonoBehaviour {
         return _apertaBotao[indice].ativo;
     }
 
-    int  ChecarAtivo()
+    int ChecarAtivo()
     {
         int indice = -1;
-        foreach(ApertaBotao botao in _apertaBotao)
+        foreach (ApertaBotao botao in _apertaBotao)
         {
             if (botao.ativo)
             {
@@ -62,8 +64,8 @@ public class MaquinaEstadosBotao : MonoBehaviour {
                 ap.setContador(0);
                 valendo = false;
             }
-                
-        if ( _contador == 2 && valendo)
+
+        if (_contador == 2 && valendo)
             if (!Acessa(8))
             {
                 Desativa();
@@ -71,14 +73,14 @@ public class MaquinaEstadosBotao : MonoBehaviour {
             }
 
         if (_contador == 3 && valendo)
-             if (!Acessa(4))
+            if (!Acessa(4))
             {
                 Desativa();
                 ap.setContador(0);
             }
 
         if (_contador == 4 && valendo)
-             if (!Acessa(1))
+            if (!Acessa(1))
             {
                 Desativa();
                 ap.setContador(0);
@@ -86,7 +88,7 @@ public class MaquinaEstadosBotao : MonoBehaviour {
             }
 
         if (_contador == 5 && valendo)
-             if (!Acessa(9))
+            if (!Acessa(9))
             {
                 Desativa();
                 ap.setContador(0);
@@ -97,7 +99,7 @@ public class MaquinaEstadosBotao : MonoBehaviour {
             if (Acessa(11))
             {
                 Desativa();
-                cpa.ativar = true;
+                //PassaValor.numPorta = 4;
 
             }
             else if (!Acessa(11))
@@ -107,17 +109,18 @@ public class MaquinaEstadosBotao : MonoBehaviour {
                 valendo = false;
             }
 
-    }    
+    }
 
     public IEnumerator Espera()
     {
         yield return new WaitForSecondsRealtime(25f);
     }
 
-    
-        // Update is called once per frame
-    void FixedUpdate() {
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
     }
 
-    
+
 }

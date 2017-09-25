@@ -53,14 +53,14 @@ public class PlayerConnection : MonoBehaviour {
                 logar = false;//
 
                 canvas.SetActive(false);//fecha canvas
-
+                /* 
                 //Não destruir objetos de conexao para serem passados para nova cena
                 DontDestroyOnLoad(passaValor);
                 DontDestroyOnLoad(PassaValor.socket);
                 DontDestroyOnLoad(PassaValor.go);
                 DontDestroyOnLoad(PassaValor.connection);
-
-                SceneManager.LoadScene("Assets/Scenes/Sala1.unity", LoadSceneMode.Single); //carrega sala
+                */
+                SceneManager.LoadScene("Assets/Sala_1.unity", LoadSceneMode.Additive); //carrega sala
 
                 Scene sala = SceneManager.GetSceneAt(1);//pega noga cena
 
@@ -77,15 +77,18 @@ public class PlayerConnection : MonoBehaviour {
 
                 canvas.SetActive(false);
 
+                /* 
+                //Não destruir objetos de conexao para serem passados para nova cena
                 DontDestroyOnLoad(passaValor);
                 DontDestroyOnLoad(PassaValor.socket);
                 DontDestroyOnLoad(PassaValor.go);
                 DontDestroyOnLoad(PassaValor.connection);
+                */
+                SceneManager.LoadScene("Assets/Sala_2.unity", LoadSceneMode.Additive); //carrega sala
 
-                SceneManager.LoadSceneAsync("Assets/Scenes/Sala2.unity", LoadSceneMode.Single); //carrega sala
+                Scene sala = SceneManager.GetSceneAt(1);//pega noga cena
 
-                Scene sala = SceneManager.GetSceneAt(1);
-
+                //Joga objetos de conexao da cena anterior na nova cena
                 SceneManager.MoveGameObjectToScene(passaValor, sala);
                 SceneManager.MoveGameObjectToScene(PassaValor.go, sala);
                 SceneManager.MoveGameObjectToScene(PassaValor.connection, sala);
