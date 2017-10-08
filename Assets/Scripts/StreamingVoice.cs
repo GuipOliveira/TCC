@@ -44,6 +44,10 @@ public class StreamingVoice : MonoBehaviour
     public void OnJoinedRoom()
     {
         o = PhotonNetwork.Instantiate("PlayerVoice", new Vector3(0.0f, 0.0f), Quaternion.identity, 0); //Instancia o player e rec de voz
+		o.GetComponent<PhotonVoiceSpeaker> ().enabled = false; //Para não reproduzir o próprio audio do jogador devo desligar o player
+		o.GetComponent<AudioSource> ().enabled = false; //Para não reproduzir o próprio audio do jogador devo desligar o player
+
+		
     }
     public void OnCreateRoom()
     {

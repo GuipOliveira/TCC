@@ -25,14 +25,19 @@ public class PhotonVoiceSpeaker : Photon.MonoBehaviour
 
     void Awake()
     {
+
         this.player = new AudioStreamPlayer(GetComponent<AudioSource>(), "PUNVoice: PhotonVoiceSpeaker:", PhotonVoiceSettings.Instance.DebugInfo);
         PhotonVoiceNetwork.LinkSpeakerToRemoteVoice(this);
+
     }
 
     // initializes the speaker with remote voice info
     internal void OnVoiceLinked(int frequency, int channels, int frameSamplesPerChannel, int playDelayMs)
     {
+		if(!photonView.isMine)
+		{
         this.player.Start(frequency, channels, frameSamplesPerChannel, playDelayMs);
+		}
     }
 
     internal void OnVoiceUnlinked()
