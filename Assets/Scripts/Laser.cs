@@ -25,6 +25,7 @@ public class Laser : MonoBehaviour {
 
     void procuraHit()
     {
+
         Vector3 lazerEnd = transform.position + ( - 1 * transform.forward * range);
         RaycastHit hit;
         if(Physics.Raycast(transform.position, - transform.forward, out hit, range))
@@ -32,7 +33,9 @@ public class Laser : MonoBehaviour {
             HitBoxMapa hbm = hit.transform.GetComponent<HitBoxMapa>();
             if (hbm != null)
             {
-                cpa.ativar = true;
+
+                // cpa.ativar = true;
+                PassaValor.numPorta = 3;
             }
         }
 

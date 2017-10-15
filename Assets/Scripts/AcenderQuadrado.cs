@@ -25,7 +25,8 @@ public class AcenderQuadrado : MonoBehaviour {
     public AcenderQuadrado _lin2;
     public AcenderQuadrado _lin3;
 
-
+    //Posição do quadrado 
+    public string posicao;
 
     // Use this for initialization
     void Start()
@@ -54,12 +55,13 @@ public class AcenderQuadrado : MonoBehaviour {
 
     public void Controla()
     {
+       
         if (!ativar)
         {
             Acende();
             ativar = true;
         }
-        else
+        else 
         {
             Apagar();
             ativar = false;

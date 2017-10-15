@@ -22,6 +22,8 @@ public class PassaValor : MonoBehaviour
     public static GameObject connection; /* objeto de conexão */
     public static int numPorta; /*número da porta que será aberta (número do gameobject)*/
     public static bool sinalRecebido; /*indica se o sinal da porta foi recebido ou enviado*/
+    public static bool vezMatriz; /*indica de quem é a vez para jogar no puzzle da matriz*/
+    public static string posicaoSelecionadaMatriz; /*indica qual botão foi selecionado na Matriz*/
 
     // Use this for initialization
     void Start()
@@ -36,6 +38,7 @@ public class PassaValor : MonoBehaviour
         socket.On("LOGIN_INSUCESS", OnLoginInsucess);
         socket.On("RECEBE_OBJ", receberOBJ);
         socket.On("RECEBE_SINALPORTA", recebeSinalPorta);
+        socket.On("ATUALIZA_VEZMATRIZ", atualizaVezMatriz);
     }
 
     // Update is called once per frame
@@ -103,7 +106,19 @@ public class PassaValor : MonoBehaviour
             socket.Emit("SINALPORTA", new JSONObject(data));
         }
     }
+    public static void transferirObj(string _idObj)
+    {
+        idOBJ = "";
+        if (!string.IsNullOrEmpty(_idObj))
+        {
 
+            Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
+            data["idObj"] = _idObj.ToString();
+            data["id"] = id_player.ToString();
+
+            socket.Emit("TRANSFERIR", new JSONObject(data));
+        }
+    }
     static void recebeSinalPorta(SocketIOEvent _obj)
     {
 
@@ -122,20 +137,27 @@ public class PassaValor : MonoBehaviour
         }
     }
 
-
-    public static void transferirObj(string _idObj)
+    /*atualiza nos clientes qual jogador deverá jogar no puzzle Matriz e pega qual a posição do ultimo botão apertado*/
+    static void atualizaVezMatriz(SocketIOEvent _obj)
     {
-        idOBJ = "";
-        if (!string.IsNullOrEmpty(_idObj))
+        if (!string.IsNullOrEmpty(nm_player))
         {
+            
+            string idRecebe = JsonToString(_obj.data.GetField("id").ToString(), "\"");
+            string _sessao = JsonToString(_obj.data.GetField("sessao").ToString(), "\"");
+            string vez = JsonToString(_obj.data.GetField("vezMatriz").ToString(), "\"");
+            string posicao = JsonToString(_obj.data.GetField("posicaoSelecionada").ToString(), "\"");
 
-            Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
-            data["idObj"] = _idObj.ToString();
-            data["id"] = id_player.ToString();
+            if (idRecebe == id_player && sessao == _sessao)
+            {
+                if (vez.Equals("V")) PassaValor.vezMatriz = true;
+                else PassaValor.vezMatriz = false;
 
-            socket.Emit("TRANSFERIR", new JSONObject(data));
+                posicaoSelecionadaMatriz = posicao;
+            }
         }
-    }
+     }
+
 
     public static void aguardar()
     {
@@ -144,6 +166,22 @@ public class PassaValor : MonoBehaviour
         data["sessao"] = sessao.ToString();
         socket.Emit("AGUARDAR", new JSONObject(data));
     }
+
+
+    /*envia para o servidor a posição do botão apertado na matriz*/
+    public static void alterarJogadaMatriz(string posicao)
+    {
+        if (!string.IsNullOrEmpty(nm_player))
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
+          
+            data["sessao"] = sessao.ToString();
+            data["id"] = id_player.ToString();
+            data["posicao"] = posicao;
+            socket.Emit("ALTERAR_VEZMATRIZ", new JSONObject(data));
+        }
+    }
+
 
 
     //métodos úteis JSON

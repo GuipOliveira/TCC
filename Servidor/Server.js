@@ -1,11 +1,13 @@
 /*CLASSE RESPONSÁVEL PELO GERENCIAMENTO DA APLICAÇÃO NO SERVIDOR E COMUNICAÇÃO ENTRE OS DOIS CLIENTES*/
-var io = require('socket.io')({
-	transports: ['websocket'],
-});
+var express  = require('express');
+var app      = express();
+var http     = require('http').Server(app);
+var io       = require('socket.io')(http);
+
 var shortId 		= require('shortid');
+app.use(express.static(__dirname ));
 var clients			= [];
 var radio			= 0;
-io.attach(4567);
 
 
 io.on('connection', function(socket){
@@ -26,7 +28,9 @@ io.on('connection', function(socket){
 			players:0,
 			flgEnvio:0,
 			idObj:0,
-			porta:-1
+			porta:-1,
+			vezMatriz:'V', //seta a vez do jogador jogar no puzzle de acender Matriz
+			posicaoSelecionada: '' //posição selecionada na Matriz
 		}
 		
 		for(i = 0; i < clients.length; i++){
@@ -38,6 +42,7 @@ io.on('connection', function(socket){
 				{
 				console.log('[INFO] Segundo player entrando na sessão: ' + currentUser.sessao);
 				currentUser.players = 2;//segunda a entrar na sala
+				currentUser.vezMatriz = 'F';
 				}
 				else{
 				console.log('[INFO] Já existem dois players na sessão: ' + currentUser.sessao);
@@ -51,6 +56,7 @@ io.on('connection', function(socket){
 		{
 		console.log('[INFO] Primeiro Player a entrar na sessão: ' + currentUser.sessao);
 		currentUser.players = 1; //primeiro a entrar nesta sessão
+		currentUser.vezMatriz = 'V';
 		}
 		
 		if(currentUser.players != -1)
@@ -96,12 +102,18 @@ io.on('connection', function(socket){
 					clients[i].flgEnvio = 0;
 					
 					socket.emit('RECEBE_SINALPORTA',clients[i]);
-					i = clients.length;
+			
 				}
 			}
+			else if(clients[i].sessao == player.sessao && clients[i].id == player.id) //verifica o usuário conectado 
+			{
+				socket.emit('ATUALIZA_VEZMATRIZ',clients[i]); //atualiza para os clientes, de quem é a vez de jogar no puzzle Matriz e envia a ultima posição de botão selecionada
+			}
 		}
-	
+					
 	});
+	
+
 	
 	
 		/*Método responsável por troca de sinais para abertura de portas*/
@@ -120,10 +132,39 @@ io.on('connection', function(socket){
 		}
 	
 	});
+	
+/*Método responsável por trocar a vez de jogada na Matriz*/
+	socket.on('ALTERAR_VEZMATRIZ', function(player){
+		 console.log('Botão apertado:' + player.posicao)
+		for(i = 0; i < clients.length; i++){
+			if(clients[i].sessao == player.sessao && clients[i].id == player.id) //verifica usuário conectado a sessão
+			{
+					clients[i].vezMatriz = 'F';
+					clients[i].posicaoSelecionada = '';
+					console.log('[INFO] Player ' + player.id + ' já jogou na Matriz!');
+
+					socket.emit('ATUALIZA_VEZMATRIZ',clients[i]);
+			}
+			else if(clients[i].sessao == player.sessao && clients[i].id != player.id) //verifica o outro usuário conectado a sessão
+			{
+					clients[i].vezMatriz = 'V';
+					clients[i].posicaoSelecionada = player.posicao;
+					console.log('[INFO] Player ' + player.id + ' é o proximo a jogar na Matriz!');
+			}
+		}
+	
+	});
+	
+
 
 	
 	
 });
 
+
+
+http.listen(process.env.PORT ||3000, function(){
+	console.log('listening on *:3000');
+});
 
 console.log("------- server is running -------");
