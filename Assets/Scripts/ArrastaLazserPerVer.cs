@@ -35,7 +35,7 @@ public class ArrastaLazserPerVer : MonoBehaviour {
     {
         ArrastarLazerVertical target = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray.origin, ray.direction * 20, out hit))
+        if (Physics.Raycast(ray.origin, ray.direction * 40, out hit))
         {
             target = hit.transform.GetComponent<ArrastarLazerVertical>();
         }

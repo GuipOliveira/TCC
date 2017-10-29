@@ -14,6 +14,7 @@ public class LaserAcerta : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         ativo = true;
+        Debug.Log(other.gameObject.name);
     }
 
 }
