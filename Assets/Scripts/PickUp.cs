@@ -4,97 +4,61 @@ using System.Collections;
 public class PickUp: MonoBehaviour
 {
 
-    public GameObject mainCamera;
-    public GameObject objCarregado;
+    Pegavel getTarget;
+    public bool isMouseDragging;
+    Vector3 offsetValue;
+    Vector3 positionOfScreen;
+    Pegavel _pegavel;
 
-    public bool isCarregando;
-    public Transferencia trans;
-    public float distancia;
-    public float smooth;
-
-    // Use this for initialization
-    void Start()
-    {
-        trans = new Transferencia();
-        mainCamera = GameObject.FindWithTag("MainCamera");
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (isCarregando)
-        {
 
-            carregar(objCarregado);
-            if (Input.GetKeyDown(KeyCode.R))
+        //Mouse Button Press Down
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hitInfo;
+            getTarget = ReturnClickedObject(out hitInfo);
+            if (getTarget != null)
             {
-                trans.transferir(objCarregado);
-                objCarregado.SetActive(false);
-                dropObj();
-  
-                
-            }
-            isSolto();
-        }
-        else
-        {
-            int x = Screen.width / 2;
-            int y = Screen.height / 2;
-
-            pegar();
-        }
-    }
-
-
-
-    
-
-    void carregar(GameObject obj)
-    {
-        obj.transform.position = Vector3.Lerp(obj.transform.position, mainCamera.transform.position + mainCamera.transform.forward * distancia, Time.deltaTime * smooth);
-        obj.transform.rotation = Quaternion.identity;
-    }
-
-    void pegar()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            int x = Screen.width / 2;
-            int y = Screen.height / 2;
-         
-            Ray ray = mainCamera.GetComponent<Camera>().ScreenPointToRay(new Vector3(x, y));
-            RaycastHit hit;
-            Debug.LogWarning("Colisor: " + Physics.Raycast(ray, out hit));
-            if (Physics.Raycast(ray, out hit))
-            {
-                Debug.LogWarning("Pegando 1");
-                Pegavel p = hit.collider.GetComponent<Pegavel>();
-      
-                if (p != null)
-                {
-                    isCarregando = true;
-                    objCarregado = p.gameObject;
-                    p.gameObject.GetComponent<Rigidbody>().useGravity = false;
-                }
+                isMouseDragging = true;
+                //Converting world position to screen position.
+                positionOfScreen = Camera.main.WorldToScreenPoint(getTarget.transform.position);
+                offsetValue = getTarget.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, positionOfScreen.z));
             }
         }
-    }
 
-    void isSolto()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
+        //Mouse Button Up
+        if (Input.GetMouseButtonUp(0))
         {
-            dropObj();
+            isMouseDragging = false;
         }
+
+        //Is mouse Moving
+        if (isMouseDragging)
+        {
+            //tracking mouse position.
+            Vector3 currentScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, positionOfScreen.z);
+
+            //converting screen position to world position with offset changes.
+            Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenSpace) + offsetValue;
+
+            //It will update target gameobject's current postion.
+            getTarget.transform.position = currentPosition;
+        }
+
+
     }
 
-    void dropObj()
+    //Method to Return Clicked Object
+    Pegavel ReturnClickedObject(out RaycastHit hit)
     {
-        isCarregando = false;
-        objCarregado.gameObject.GetComponent<Rigidbody>().useGravity = true;
-        objCarregado = null;
+        Pegavel target = null;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray.origin, ray.direction * 10, out hit))
+        {
+            target = hit.transform.GetComponent<Pegavel>();
+        }
+        return target;
     }
-
 
 }

@@ -139,7 +139,7 @@ public class TestSocketIO : MonoBehaviour
 	{
 	Debug.LogWarning("Enviando Objeto");
 	PickUp pickup = myPlayer.GetComponent<PickUp>();
-	if(pickup.isCarregando)
+	if(pickup.isMouseDragging)
 	{
             Debug.LogWarning("id_player " + idPlayer);
             Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON

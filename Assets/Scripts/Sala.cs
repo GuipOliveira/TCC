@@ -171,6 +171,18 @@ public class Sala : MonoBehaviour
             PassaValor.sinalRecebido = false;
             PassaValor.numPorta = -1;
         }
+        else if (numPorta == 6)
+        {
+            GameObject vidro = GameObject.Find("Vidro");
+            Destroy(vidro);
+
+            if (!PassaValor.sinalRecebido)
+            {
+                PassaValor.enviaSinalPorta(numPorta);
+            }
+            PassaValor.sinalRecebido = false;
+            PassaValor.numPorta = -1;
+        }
     }
 
 

@@ -99,7 +99,7 @@ public class MaquinaEstadosBotao : MonoBehaviour
             if (Acessa(11))
             {
                 Desativa();
-                PassaValor.numPorta = 4;
+                PassaValor.numPorta = 1;
 
             }
             else if (!Acessa(11))

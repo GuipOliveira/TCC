@@ -1,8 +1,8 @@
 ﻿<Properties StartupItem="TCC.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ControlaPortaAnimacao.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\BotaoBinario.cs">
     <Files>
-      <File FileName="Assets\ControlaPortaAnimacao.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\BotaoBinario.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

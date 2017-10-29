@@ -13,7 +13,7 @@ public class AchaPais : MonoBehaviour {
 	void Update () {
         if (hit1.ativo && hit2.ativo)
         {
-            PassaValor.numPorta = 3;                
+            PassaValor.numPorta = 2;                
         }
 	}
 }
