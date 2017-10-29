@@ -9,17 +9,81 @@ app.use(express.static(__dirname ));
 var clients			= [];
 var radio			= 0;
 
+/*objetos de conexão com o Mongo*/
+var assert = require('assert');
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://tcc360:tcc360@cluster0-shard-00-00-62qzf.mongodb.net:27017,cluster0-shard-00-01-62qzf.mongodb.net:27017,cluster0-shard-00-02-62qzf.mongodb.net:27017/tcc360?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin";
+var ObjectId = require('mongodb').ObjectID;
+/*objetos de conexão com o Mongo*/
+
+/*insere usuarios na coleção de ranking*/
+function inserirRanking(user1,user2,sala)
+{
+
+	MongoClient.connect(url, function(err, db) {
+	assert.equal(null, err);
+		db.collection('ranking').insertOne({
+			 "usuario1" : user1,
+			 "usuario2" : user2,
+			 "sala": sala,
+			 "inicio": Date.now(),
+			 "fim":"-1"
+		
+		}, function(err, result) {
+		if(err) throw err;
+		
+		assert.equal(err, null);
+		console.log("Inserindo no bd");
+
+		});
+
+		db.close();
+});
+}
+
+/*retorna ultimo id inserido*/
+function ultimoInserido()
+{
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  db.collection("ranking").find({}).sort({"_id":-1}).limit(1).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result[0]._id.toString());
+
+    db.close();
+  });
+});
+
+}
+
+/*retorna dados do BD do ultimo registro inserido ao primeiro*/
+function lerBD()
+{
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  db.collection("ranking").find({}).sort({"_id":-1}).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result);
+
+    db.close();
+  });
+});
+
+}
+
+
+
 
 io.on('connection', function(socket){
     
 	var currentUser;
-  
-    
+	
 	console.log('A user ready for connection!');
 	
 	/*Método que loga o usuário no servidor*/
 	socket.on('LOGIN', function(player){
-	   
+
+	   var primeiroPlayer;
 	   console.log('[INFO] Player ' + player.name + ' conectando!');
 	   currentUser = {
 			name:player.name,
@@ -43,6 +107,7 @@ io.on('connection', function(socket){
 				console.log('[INFO] Segundo player entrando na sessão: ' + currentUser.sessao);
 				currentUser.players = 2;//segunda a entrar na sala
 				currentUser.vezMatriz = 'F';
+				primeiroPlayer = clients[i].name;
 				}
 				else{
 				console.log('[INFO] Já existem dois players na sessão: ' + currentUser.sessao);
@@ -62,6 +127,20 @@ io.on('connection', function(socket){
 		if(currentUser.players != -1)
 		{
 			clients.push(currentUser);
+			try
+			{
+				if(currentUser.players == 2)
+				{
+					inserirRanking(primeiroPlayer,currentUser.name,currentUser.sessao); //insere
+					lerBD(); //le
+				}
+
+			}catch(e)
+			{
+				console.log(e.toString());
+			}
+			
+			
 			console.log('Total players: ' + currentUser.players);
 			console.log('Inserido player: ' + currentUser.id);
 			socket.emit('LOGIN_SUCESS',currentUser);//usuário logado

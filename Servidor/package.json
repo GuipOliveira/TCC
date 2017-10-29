@@ -1,20 +1,21 @@
 {
-	"name": "testetcc123",
-	"version": "0.0.1",
-	"description": "teste",
-	"main": "Sever.js",
-	"dependencies": {
-		"express": "^4.10.4",
-		"socket.io": "^1.2.1",
-		"shortid": "^2.2.2"
-	},
-	"devDependencies": {},
-	"scripts": {
-	 "teste": "echo \"Error: no test specified\" && exit 1",
-	 "start": "node Server.js"
-	},
-	"author": "Leandro Guimaraes",
-	"license": "MIT"
-
-
+  "name": "testetcc123",
+  "version": "0.0.1",
+  "description": "teste",
+  "main": "Sever.js",
+  "dependencies": {
+    "express": "^4.10.4",
+    "mongodb": "^2.2.33",
+    "mongodb-stitch": "^1.1.8",
+    "mongoose": "^4.12.4",
+    "shortid": "^2.2.2",
+    "socket.io": "^1.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "teste": "echo \"Error: no test specified\" && exit 1",
+    "start": "node Server.js"
+  },
+  "author": "Leandro Guimaraes",
+  "license": "MIT"
 }
