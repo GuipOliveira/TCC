@@ -336,6 +336,7 @@
     <Compile Include="Assets\Scripts\PUNVoiceScripts\PhotonVoiceRecorderShort.cs" />
     <Compile Include="Assets\Scripts\PUNVoiceScripts\PhotonVoiceSettings.cs" />
     <Compile Include="Assets\Scripts\PUNVoiceScripts\PhotonVoiceSpeaker.cs" />
+    <Compile Include="Assets\Scripts\Ranking.cs" />
     <Compile Include="Assets\Scripts\Sala.cs" />
     <Compile Include="Assets\Scripts\StreamingVoice.cs" />
     <Compile Include="Assets\Scripts\TocarAudio.cs" />
