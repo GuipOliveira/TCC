@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AchaPais : MonoBehaviour {
 
+    public bool boolean;
     public LaserAcerta hit1;
     public LaserAcerta hit2;
 
@@ -11,9 +12,13 @@ public class AchaPais : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (hit1.ativo && hit2.ativo)
+        if (!boolean)
         {
-            PassaValor.numPorta = 2;                
+            if (hit1.ativo && hit2.ativo)
+            {
+                PassaValor.numPorta = 2;
+                boolean = true;
+            }
         }
 	}
 }
