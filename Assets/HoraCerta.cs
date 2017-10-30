@@ -9,11 +9,15 @@ public class HoraCerta : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         ativo = true;
+        Debug.LogWarning("Bateu Ponteiro");
+        PassaValor.setPonteiroRelogio(ativo);
     }
 
     void OnTriggerExit(Collider other)
     {
         ativo = false;
+        Debug.LogWarning("Não Bateu Ponteiro");
+        PassaValor.setPonteiroRelogio(ativo);
     }
 
 

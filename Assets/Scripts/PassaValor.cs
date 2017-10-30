@@ -26,6 +26,7 @@ public class PassaValor : MonoBehaviour
     public static string posicaoSelecionadaMatriz; /*indica qual botão foi selecionado na Matriz*/
     public static string ranking;
 
+
     // Use this for initialization
     void Start()
     {
@@ -42,6 +43,7 @@ public class PassaValor : MonoBehaviour
         socket.On("RECEBE_OBJ", receberOBJ);
         socket.On("RECEBE_SINALPORTA", recebeSinalPorta);
         socket.On("ATUALIZA_VEZMATRIZ", atualizaVezMatriz);
+        socket.On("PONTEIRO_OK",ponteiroOk);
         
     }
 
@@ -67,6 +69,28 @@ public class PassaValor : MonoBehaviour
 
         }
 
+    }
+
+    static void ponteiroOk(SocketIOEvent _myPlayer)
+    {
+        PassaValor.numPorta = 3;
+        Debug.LogWarning("Concluindo Puzzle Relogio");
+    }
+
+    public static void setPonteiroRelogio(bool ponteiro)
+    {
+        string ponteiroRelogio = null;
+        if (ponteiro)
+            ponteiroRelogio = "V";
+        else
+            ponteiroRelogio = "F";
+
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["sessao"] = sessao.ToString();
+        data["id"] = id_player.ToString();
+        data["ponteiroRelogio"] = ponteiroRelogio;
+
+        socket.Emit("ATUALIZAR_PONTEIRO", new JSONObject(data));
     }
 
     public static void getRanking()

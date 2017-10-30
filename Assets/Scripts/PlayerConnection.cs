@@ -23,6 +23,7 @@ public class PlayerConnection : MonoBehaviour {
     public string nm_player;
     public string id_player;
     public GameObject passaValor;
+    
 
     // Use this for initialization
     void Start () {

@@ -35,7 +35,7 @@ public class AcenderRay : MonoBehaviour {
         if (cont == 16)
         {
             portaAberta = true;
-            PassaValor.numPorta = 3; //AbrirPorta
+            PassaValor.numPorta = 4; //AbrirPorta
             Debug.Log(PassaValor.numPorta);
            
         }

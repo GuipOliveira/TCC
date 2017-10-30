@@ -249,3 +249,6 @@ d6a3d4abec08ea5e51ea9e9ae0151569 Assembly-CSharp.dll:.AcenderNumero
 4ce1ed7493f0c6acddfd693ac490d40f Assembly-CSharp.dll:.BotaoBinario2
 2468ee5fe815010ce8c416e9ff7db1a0 Assembly-CSharp.dll:.PhotonVoiceRecorder
 0f3d4bb7128a287827d041c696039525 Assembly-CSharp-firstpass.dll:UnityStandardAssets.Utility.AutoMobileShaderSwitch
+55defb7bcaacd68122691f49d19bf12d Assembly-CSharp.dll:.HoraCerta
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Ponteiro
+5fe6f474857162f7dca7edcba6c8719c Assembly-CSharp.dll:.ArrastarPonteiro

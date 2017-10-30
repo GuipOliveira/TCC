@@ -97,7 +97,8 @@ io.on('connection', function(socket){
 			porta:-1,
 			vezMatriz:'V', //seta a vez do jogador jogar no puzzle de acender Matriz
 			posicaoSelecionada: '', //posição selecionada na Matriz
-			IdBd:'-1'
+			IdBd:'-1',
+			ponteiroRelogio:'F'
 		}
 		
 		for(i = 0; i < clients.length; i++){
@@ -173,6 +174,38 @@ io.on('connection', function(socket){
 		}
 	});
 	
+	/*ATUALIZA NO SERVIDOR SE OS PONTEIROS ESTÃO APONTADOS CORRETOS, SE SIM AVISA AOS CLIENTES*/
+	socket.on('ATUALIZAR_PONTEIRO', function(player){
+		var pont1 = '';
+		var pont2 = '';
+		console.log('Atualizando Ponteiro Relogio');
+		for(i = 0; i < clients.length; i++){
+			
+			if(clients[i].id == player.id)
+			{
+				clients[i].ponteiroRelogio = player.ponteiroRelogio;
+				pont1 = clients[i].ponteiroRelogio;
+			}
+			else if(clients[i].sessao == player.sessao && clients[i].id != player.id)
+			{
+				pont2 = clients[i].ponteiroRelogio;
+			}
+		
+		}
+		
+		if(pont1 == 'V' && pont2 == 'V')
+		{
+			socket.emit('PONTEIRO_OK',clients[0]);
+			console.log('Player: ' + player.id+' Relógio ajustado!');
+		}
+		else
+		{
+		
+		console.log('Player: ' + player.id+' Relógio não ajustado!');
+		}
+		console.log('Player: ' + player.ponteiroRelogio);
+	});
+	
 	/*Método responsável por verificar se existe algum sinal porta enviado*/
 	socket.on('AGUARDAR', function(player){
 
@@ -243,7 +276,7 @@ io.on('connection', function(socket){
 	console.log('Atualizando Ranking!');
 	MongoClient.connect(url, function(err, db) {
 	if (err) throw err;
-	db.collection("ranking360").find({}).sort({"duracao":-1}).toArray(function(err, result) {
+	db.collection("ranking360").find({}).sort({"duracao":-1}).limit(5).toArray(function(err, result) {
     if (err) throw err;
     
 	console.log(result);
