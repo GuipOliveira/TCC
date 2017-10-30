@@ -24,6 +24,7 @@ public class PassaValor : MonoBehaviour
     public static bool sinalRecebido; /*indica se o sinal da porta foi recebido ou enviado*/
     public static bool vezMatriz; /*indica de quem é a vez para jogar no puzzle da matriz*/
     public static string posicaoSelecionadaMatriz; /*indica qual botão foi selecionado na Matriz*/
+    public static string ranking;
 
     // Use this for initialization
     void Start()
@@ -34,11 +35,14 @@ public class PassaValor : MonoBehaviour
         go = GameObject.Find("SocketIO");
         socket = go.GetComponent<SocketIOComponent>();
         connection = GameObject.Find("SocketIO");
+
+        socket.On("ATUALIZA_RANKING", atualizaRanking);
         socket.On("LOGIN_SUCESS", OnLoginSucess);
         socket.On("LOGIN_INSUCESS", OnLoginInsucess);
         socket.On("RECEBE_OBJ", receberOBJ);
         socket.On("RECEBE_SINALPORTA", recebeSinalPorta);
         socket.On("ATUALIZA_VEZMATRIZ", atualizaVezMatriz);
+        
     }
 
     // Update is called once per frame
@@ -63,6 +67,14 @@ public class PassaValor : MonoBehaviour
 
         }
 
+    }
+
+    public static void getRanking()
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
+        data["x"] = "x";
+        data["y"] = "y";
+        socket.Emit("GET_RANKING",new JSONObject(data));
     }
 
     static void OnLoginInsucess(SocketIOEvent _myPlayer)
@@ -157,6 +169,12 @@ public class PassaValor : MonoBehaviour
             }
         }
      }
+
+    static void atualizaRanking(SocketIOEvent _obj)
+    {
+        ranking = JsonToString(_obj.data.GetField("ranking").ToString(), "\"");
+
+    }
 
 
     public static void aguardar()

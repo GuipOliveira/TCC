@@ -14,6 +14,7 @@ public class PlayerConnection : MonoBehaviour {
 
     public InputField[] inputFields;
     public Button btnEntrar;
+
     public GameObject canvas;
     public int players;
     public bool fecharCanvas;
@@ -22,11 +23,11 @@ public class PlayerConnection : MonoBehaviour {
     public string nm_player;
     public string id_player;
     public GameObject passaValor;
-   
+
     // Use this for initialization
     void Start () {
 
-        btnEntrar = FindObjectOfType(typeof(Button)) as Button;
+
         btnEntrar.enabled = false;
         inputFields = FindObjectsOfType(typeof(InputField)) as InputField[];
 
@@ -104,6 +105,7 @@ public class PlayerConnection : MonoBehaviour {
         PassaValor.entrar(inputFields[0].text, inputFields[1].text);//sala e usuario
 
     }
+
 
 
 

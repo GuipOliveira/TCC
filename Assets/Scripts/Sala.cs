@@ -44,6 +44,7 @@ public class Sala : MonoBehaviour
             }
             else //aguarda alguma entrada de objetos na sala
             {
+                
                 PassaValor.aguardar();
             }
             if (!string.IsNullOrEmpty(PassaValor.idObjRec))//Se houver algum idObjeRec significa que algum objeto foi enviado para esta sala

@@ -17,17 +17,19 @@ var ObjectId = require('mongodb').ObjectID;
 /*objetos de conexão com o Mongo*/
 
 /*insere usuarios na coleção de ranking*/
-function inserirRanking(user1,user2,sala)
+function inserirRanking(idsessao,user1,user2,sala)
 {
 
 	MongoClient.connect(url, function(err, db) {
 	assert.equal(null, err);
-		db.collection('ranking').insertOne({
-			 "usuario1" : user1,
+		db.collection('ranking360').insertOne({
+			"idsessao": idsessao,
+			"usuario1" : user1,
 			 "usuario2" : user2,
 			 "sala": sala,
 			 "inicio": Date.now(),
-			 "fim":"-1"
+			 "fim":"-1",
+			 "duracao":"-1"
 		
 		}, function(err, result) {
 		if(err) throw err;
@@ -46,7 +48,7 @@ function ultimoInserido()
 {
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  db.collection("ranking").find({}).sort({"_id":-1}).limit(1).toArray(function(err, result) {
+  db.collection("ranking360").find({}).sort({"_id":-1}).limit(1).toArray(function(err, result) {
     if (err) throw err;
     console.log(result[0]._id.toString());
 
@@ -61,7 +63,7 @@ function lerBD()
 {
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  db.collection("ranking").find({}).sort({"_id":-1}).toArray(function(err, result) {
+  db.collection("ranking360").find({}).sort({"_id":-1}).toArray(function(err, result) {
     if (err) throw err;
     console.log(result);
 
@@ -94,7 +96,8 @@ io.on('connection', function(socket){
 			idObj:0,
 			porta:-1,
 			vezMatriz:'V', //seta a vez do jogador jogar no puzzle de acender Matriz
-			posicaoSelecionada: '' //posição selecionada na Matriz
+			posicaoSelecionada: '', //posição selecionada na Matriz
+			IdBd:'-1'
 		}
 		
 		for(i = 0; i < clients.length; i++){
@@ -126,23 +129,24 @@ io.on('connection', function(socket){
 		
 		if(currentUser.players != -1)
 		{
-			clients.push(currentUser);
+			
 			try
 			{
 				if(currentUser.players == 2)
 				{
-					inserirRanking(primeiroPlayer,currentUser.name,currentUser.sessao); //insere
-					lerBD(); //le
+					inserirRanking(currentUser.id,primeiroPlayer,currentUser.name,currentUser.sessao); //insere
+			
 				}
 
 			}catch(e)
 			{
 				console.log(e.toString());
 			}
-			
-			
+			clients.push(currentUser);
+
 			console.log('Total players: ' + currentUser.players);
 			console.log('Inserido player: ' + currentUser.id);
+			console.log('Ultimo Inserido: \n' + currentUser.IdBd);
 			socket.emit('LOGIN_SUCESS',currentUser);//usuário logado
 		}
 		else
@@ -234,6 +238,30 @@ io.on('connection', function(socket){
 	
 	});
 	
+		/*Retorna o ranking com os melhores jogadores*/
+	socket.on('GET_RANKING',function(data){
+	console.log('Atualizando Ranking!');
+	MongoClient.connect(url, function(err, db) {
+	if (err) throw err;
+	db.collection("ranking360").find({}).sort({"duracao":-1}).toArray(function(err, result) {
+    if (err) throw err;
+    
+	console.log(result);
+    db.close();
+	
+	currentRetorno ={
+		ranking:''
+		
+	}
+	for(i = 0; i < result.length;i++)
+		currentRetorno.ranking += "Tempo: " + result[1].duracao + " Jogadores: " + result[i].usuario1 + " e " + result[i].usuario2 + "#";
+	
+	console.log(currentRetorno.ranking);
+	
+	socket.emit('ATUALIZA_RANKING',currentRetorno);
+	  });
+	});
+	});
 
 
 	
