@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrastaLaserPer : MonoBehaviour {
-    //Initialize Variables
-    ArrastarLaser getTarget;
+public class ArrastarPonteiro : MonoBehaviour {
+
+    public Ponteiro getTarget;
     bool isMouseDragging;
     Vector3 offsetValue;
     Vector3 positionOfScreen;
@@ -22,9 +22,9 @@ public class ArrastaLaserPer : MonoBehaviour {
             hit = hitInfo;
             if (getTarget != null)
             {
-                getTarget.transform.position = new Vector3(getTarget.transform.position.x, getTarget.transform.position.y, hit.point.z);
+                getTarget.transform.Rotate(Vector3.right , -hit.point.x);
             }
-            
+
         }
 
 
@@ -32,13 +32,13 @@ public class ArrastaLaserPer : MonoBehaviour {
     }
 
     //Method to Return Clicked Object
-    ArrastarLaser ReturnClickedObject(out RaycastHit hit)
+    Ponteiro ReturnClickedObject(out RaycastHit hit)
     {
-        ArrastarLaser target = null;
+        Ponteiro target = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray.origin, ray.direction * 40, out hit))
+        if (Physics.Raycast(ray.origin, ray.direction * 20, out hit, 40))
         {
-            target = hit.transform.GetComponent<ArrastarLaser>();
+            target = hit.transform.GetComponent<Ponteiro>();
         }
         return target;
     }

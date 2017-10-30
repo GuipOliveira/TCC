@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Inicio.unity
+=======
+- path: Assets/Sala_2.unity
+>>>>>>> 2706ac41e293290254386b115237b50f05b19d08
   isLoaded: 1
   isActive: 1
