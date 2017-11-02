@@ -53,8 +53,17 @@ public class PassaValor : MonoBehaviour
 
     }
 
+    public static void sair()
+    {
+        if (!string.IsNullOrEmpty(sessao) && !string.IsNullOrEmpty(id_player))
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
+            data["sessao"] = sessao;
+            data["id"] = id_player;
 
-
+            socket.Emit("SAIR", new JSONObject(data));//RETIRANDO USER DO SERVER
+        }
+    }
 
     public static void entrar(string sessao, string name)
     {
@@ -63,7 +72,7 @@ public class PassaValor : MonoBehaviour
 
             Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
             data["sessao"] = sessao;
-            data["name"] = name;
+            data["id"] = name;
 
             socket.Emit("LOGIN", new JSONObject(data));//solicitando login ao servidor
 
@@ -112,8 +121,8 @@ public class PassaValor : MonoBehaviour
 
         players = int.Parse(JsonToString2(_myPlayer.data.GetField("players").ToString(), "\"")); //recebe a quantidade de players no servidor
         id_player = JsonToString(_myPlayer.data.GetField("id").ToString(), "\"");
-        nm_player = JsonToString(_myPlayer.data.GetField("name").ToString(), "\"");
         sessao = JsonToString(_myPlayer.data.GetField("sessao").ToString(), "\"");
+        Debug.LogWarning("Conectado a sessão: " +sessao);
 
     }
 
@@ -132,7 +141,7 @@ public class PassaValor : MonoBehaviour
     public static void enviaSinalPorta(int numPorta)
     {
 
-        if (!string.IsNullOrEmpty(nm_player))
+        if (!string.IsNullOrEmpty(id_player))
         {
             Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
             data["porta"] = numPorta.ToString();
@@ -158,7 +167,7 @@ public class PassaValor : MonoBehaviour
     static void recebeSinalPorta(SocketIOEvent _obj)
     {
 
-        if (!string.IsNullOrEmpty(nm_player))
+        if (!string.IsNullOrEmpty(id_player))
         {
             Debug.LogWarning("Recebendo Sinal Porta");
             string idRecebe = JsonToString(_obj.data.GetField("id").ToString(), "\"");
@@ -176,7 +185,7 @@ public class PassaValor : MonoBehaviour
     /*atualiza nos clientes qual jogador deverá jogar no puzzle Matriz e pega qual a posição do ultimo botão apertado*/
     static void atualizaVezMatriz(SocketIOEvent _obj)
     {
-        if (!string.IsNullOrEmpty(nm_player))
+        if (!string.IsNullOrEmpty(id_player))
         {
             
             string idRecebe = JsonToString(_obj.data.GetField("id").ToString(), "\"");
@@ -213,7 +222,7 @@ public class PassaValor : MonoBehaviour
     /*envia para o servidor a posição do botão apertado na matriz*/
     public static void alterarJogadaMatriz(string posicao)
     {
-        if (!string.IsNullOrEmpty(nm_player))
+        if (!string.IsNullOrEmpty(id_player))
         {
             Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
           

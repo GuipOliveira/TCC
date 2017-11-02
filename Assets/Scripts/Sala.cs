@@ -34,7 +34,7 @@ public class Sala : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!string.IsNullOrEmpty(PassaValor.nm_player))
+        if (!string.IsNullOrEmpty(PassaValor.id_player))
         {
             if (!string.IsNullOrEmpty(PassaValor.idOBJ)) //Enviando objeto para outra sala
             {
@@ -190,7 +190,7 @@ public class Sala : MonoBehaviour
 
     public void carregaUser()
     {
-        if (!string.IsNullOrEmpty(PassaValor.nm_player))
+        if (!string.IsNullOrEmpty(PassaValor.id_player))
         {
             PassaValor.idOBJ = "";
             sessao = PassaValor.sessao;
@@ -201,7 +201,11 @@ public class Sala : MonoBehaviour
 
     }
 
-
+    void OnApplicationQuit()
+    {
+        Debug.LogWarning("Saindo");
+        PassaValor.sair();
+    }
 
 
 }

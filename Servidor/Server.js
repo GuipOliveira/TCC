@@ -97,10 +97,9 @@ io.on('connection', function(socket){
 			porta:-1,
 			vezMatriz:'V', //seta a vez do jogador jogar no puzzle de acender Matriz
 			posicaoSelecionada: '', //posição selecionada na Matriz
-			IdBd:'-1',
 			ponteiroRelogio:'F'
 		}
-		
+		var aux = 0;
 		for(i = 0; i < clients.length; i++){
 		
 			if(clients[i].sessao == currentUser.sessao) //loop para verificar se existe uma sessão já criada
@@ -112,6 +111,7 @@ io.on('connection', function(socket){
 				currentUser.players = 2;//segunda a entrar na sala
 				currentUser.vezMatriz = 'F';
 				primeiroPlayer = clients[i].name;
+				aux = clients[i].players;
 				}
 				else{
 				console.log('[INFO] Já existem dois players na sessão: ' + currentUser.sessao);
@@ -121,7 +121,7 @@ io.on('connection', function(socket){
 			
 			
 		}
-		if(currentUser.players ==0) 
+		if(currentUser.players ==0 || aux == 2) //variavel auxiliar verifica se o primeiro player se desconectou durante o jogo e voltou novamente
 		{
 		console.log('[INFO] Primeiro Player a entrar na sessão: ' + currentUser.sessao);
 		currentUser.players = 1; //primeiro a entrar nesta sessão
@@ -146,8 +146,7 @@ io.on('connection', function(socket){
 			clients.push(currentUser);
 
 			console.log('Total players: ' + currentUser.players);
-			console.log('Inserido player: ' + currentUser.id);
-			console.log('Ultimo Inserido: \n' + currentUser.IdBd);
+			console.log('Player: ' + currentUser.id + ' Conectado a sessão: ' + currentUser.sessao);
 			socket.emit('LOGIN_SUCESS',currentUser);//usuário logado
 		}
 		else
@@ -239,7 +238,7 @@ io.on('connection', function(socket){
 			{
 					clients[i].porta = player.porta;
 
-					console.log('[INFO] Player ' + player.id + ' enviando sinal Porta!');
+
 					clients[i].flgEnvio = 1; //sinaliza que o usuário esta enviando um objeto
 					clients[i].porta = player.porta;
 					i = clients.length;
@@ -296,7 +295,50 @@ io.on('connection', function(socket){
 	});
 	});
 
+	socket.on('SAIR',function(player){
+	console.log('Removendo jogador da sessão: ' + player.sessao);
+	try{
+	var qtd = clients.length - 1;
+	var aux = false;
 
+	
+	for(i = 0; i < clients.length;i++)
+	{
+		if(player.id == clients[i].id && player.sessao == clients[i].sessao)
+		{
+			console.log('Retirando jogador: ' + clients[i].id);
+			clients[i].sessao = '-1';
+		}
+		
+		if(i == qtd && clients[i].sessao == '-1')
+		{
+			aux = true;
+		}
+			
+	}
+
+	
+	if(aux = true)
+	{
+		var inativos = true;
+		for(j = qtd; j >= 0 && inativos; j--)
+		{
+			if(clients[j].sessao == '-1')
+			{
+				console.log('Pop: ' + clients[j].id);
+				clients.pop();
+			}
+			else
+			{
+				console.log('Jogadores Ativos');
+				inativos = false;
+			}
+		}
+	}
+	}
+	catch(e)
+	 {console.log(e.toString());}
+	});
 	
 	
 });
