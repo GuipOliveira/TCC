@@ -13,8 +13,9 @@ public class LaserAcerta : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        ativo = true;
-        Debug.Log(other.gameObject.name);
+        if (other.gameObject.name == "Hitbox")
+            ativo = true;
+        //Debug.Log(other.gameObject.name);
     }
 
 }
