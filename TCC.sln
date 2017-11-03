@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCC", "TCC.csproj", "{6EBCEFDD-A7A0-DB43-6C48-2D18D906F302}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCC.Plugins", "TCC.Plugins.csproj", "{7ADC3509-CC00-83B0-4891-BCCF5B4C3B2C}"
