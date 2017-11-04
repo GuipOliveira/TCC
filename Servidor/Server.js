@@ -17,30 +17,74 @@ var ObjectId = require('mongodb').ObjectID;
 /*objetos de conexão com o Mongo*/
 
 /*insere usuarios na coleção de ranking*/
-function inserirRanking(idsessao,user1,user2,sala)
+function inserirRanking(_idsessao,user1,user2,sala)
 {
-
+	var qtd;
+		/*Count para saber se o registro ja foi inserido*/
 	MongoClient.connect(url, function(err, db) {
-	assert.equal(null, err);
-		db.collection('ranking360').insertOne({
-			"idsessao": idsessao,
-			"usuario1" : user1,
-			 "usuario2" : user2,
-			 "sala": sala,
-			 "inicio": Date.now(),
-			 "fim":"-1",
-			 "duracao":"-1"
-		
-		}, function(err, result) {
-		if(err) throw err;
-		
-		assert.equal(err, null);
-		console.log("Inserindo no bd");
-
+    var query = { idsessao:_idsessao};
+		if (err) throw err;
+			db.collection("ranking360").find(query).toArray(function(err, result)  {
+		if (err) throw err;
+			console.log("Contando sessões");
+			qtd = result.length;
+			console.log("Quantidade de registros inserido com esta sessão: " + qtd);
+			
+			if(qtd == 0)
+			{
+			MongoClient.connect(url, function(err, db) {
+			assert.equal(null, err);
+				db.collection('ranking360').insertOne({
+					"idsessao": _idsessao,
+					"usuario1" : user1,
+					"usuario2" : user2,
+					"sala": sala,
+					"inicio": Date.now(),
+					"fim":"-1",
+					"duracao":"999999999"
+				
+				}, function(err, result) {
+				if(err) throw err;
+				
+				assert.equal(err, null);
+				console.log("Inserindo no bd");
+			
+				});
+			
+				db.close();
+				
+			});
+			}
 		});
+	});	
+	
+	
+}
 
+function atualizarRanking(idBd,sessao,user1,user2,_sala,_inicio,termino,tempo)
+{
+	try{
+	console.log('Atualizando Ranking! ' + idBd);
+	
+	MongoClient.connect(url, function(err, db) {
+	if (err) throw err;
+	var query = { _id: idBd };
+	var valores = { idsessao:sessao, usuario1:user1,usuario2:user2,sala:_sala,inicio:_inicio, fim: termino, duracao: tempo };
+	
+	
+	db.collection("ranking360").update(query, valores, function(err, res) {
+		if (err) throw err;
+		console.log("Atualizado");
 		db.close();
-});
+		});
+	});
+
+	}catch(e)
+	{
+	
+		console.log(e.toString());
+	}
+
 }
 
 /*retorna ultimo id inserido*/
@@ -97,9 +141,14 @@ io.on('connection', function(socket){
 			porta:-1,
 			vezMatriz:'V', //seta a vez do jogador jogar no puzzle de acender Matriz
 			posicaoSelecionada: '', //posição selecionada na Matriz
-			ponteiroRelogio:'F'
+			ponteiroRelogio:'F',
+			saiu:'F',
+			portasAbertas:'-1',
+			idSessao:shortId.generate()
+
 		}
 		var aux = 0;
+
 		for(i = 0; i < clients.length; i++){
 		
 			if(clients[i].sessao == currentUser.sessao) //loop para verificar se existe uma sessão já criada
@@ -112,10 +161,13 @@ io.on('connection', function(socket){
 				currentUser.vezMatriz = 'F';
 				primeiroPlayer = clients[i].name;
 				aux = clients[i].players;
+				currentUser.idSessao = clients[i].idSessao;
+				currentUser.portasAbertas = clients[i].portasAbertas;
 				}
 				else{
 				console.log('[INFO] Já existem dois players na sessão: ' + currentUser.sessao);
 				currentUser.players = -1;
+				aux = 0;
 				}
 			}
 			
@@ -135,7 +187,7 @@ io.on('connection', function(socket){
 			{
 				if(currentUser.players == 2)
 				{
-					inserirRanking(currentUser.id,primeiroPlayer,currentUser.name,currentUser.sessao); //insere
+					inserirRanking(currentUser.idSessao,primeiroPlayer,currentUser.name,currentUser.sessao); //insere
 			
 				}
 
@@ -146,7 +198,8 @@ io.on('connection', function(socket){
 			clients.push(currentUser);
 
 			console.log('Total players: ' + currentUser.players);
-			console.log('Player: ' + currentUser.id + ' Conectado a sessão: ' + currentUser.sessao);
+			console.log('Portas Abertas: ' + currentUser.portasAbertas);
+			console.log('Player: ' + currentUser.id + ' Conectado a sessão: ' + currentUser.sessao + ' Id Sessão: ' + currentUser.idSessao);
 			socket.emit('LOGIN_SUCESS',currentUser);//usuário logado
 		}
 		else
@@ -215,10 +268,11 @@ io.on('connection', function(socket){
 				{
 					console.log('[INFO] Player ' + player.id + ' recebendo sinal porta!');
 					clients[i].flgEnvio = 0;
-					
 					socket.emit('RECEBE_SINALPORTA',clients[i]);
 			
 				}
+				
+				
 			}
 			else if(clients[i].sessao == player.sessao && clients[i].id == player.id) //verifica o usuário conectado 
 			{
@@ -233,16 +287,21 @@ io.on('connection', function(socket){
 	
 		/*Método responsável por troca de sinais para abertura de portas*/
 	socket.on('SINALPORTA', function(player){
+		
+		console.log('Porta:' + player.porta)
 		for(i = 0; i < clients.length; i++){
 			if(clients[i].sessao == player.sessao && clients[i].id == player.id) //verifica usuário conectado a sessão
 			{
 					clients[i].porta = player.porta;
-
-
-					clients[i].flgEnvio = 1; //sinaliza que o usuário esta enviando um objeto
-					clients[i].porta = player.porta;
-					i = clients.length;
 				
+					
+					clients[i].flgEnvio = 1; //sinaliza que o usuário esta enviando um objeto
+					clients[i].portasAbertas = player.porta.toString();
+
+				
+			}else if(clients[i].sessao == player.sessao && clients[i].id != player.id)
+			{
+				clients[i].portasAbertas = player.porta.toString();
 			}
 		}
 	
@@ -269,13 +328,68 @@ io.on('connection', function(socket){
 		}
 	
 	});
+
+	/*Método responsável por finalizar o jogo e atualizar o BD*/
+	socket.on('ULTIMA_PORTA',function(player){
+		console.log('Game finalizado para o jogador: ' + player.id);
+		var terminou = false;
+		var _idSessao = '';
+		for(i = 0; i < clients.length;i++)
+		{
+			if(clients[i].sessao == player.sessao && clients[i].id == player.id)
+			{
+				clients[i].saiu = 'V';
+				_idSessao = clients[i].idSessao;
+			}
+			else if(clients[i].sessao == player.sessao && clients[i].id != player.id)
+			{
+				 if(clients[i].saiu == 'V')
+				 {
+					terminou = true;
+				 }
+			}
+		}
+	if(terminou)
+	{
+	try{
+		console.log('Game finalizado para os dois Players, na sessão: ' + _idSessao);
+		var inicio = ''
+		var idBd = '';
+		var query = { idsessao: _idSessao,fim:'-1' };
+		var fim = Date.now();
+		
+		/*Busca o Id a ser atualizado*/
+			MongoClient.connect(url, function(err, db) {
+
+				if (err) throw err;
+					db.collection("ranking360").find(query).limit(1).toArray(function(err, result)  {
+				if (err) throw err;
+					idBd = result[0]._id;
+					var sessao = result[0].idsessao;
+					var user1 = result[0].usuario1;
+					var user2 = result[0].usuario2;
+					var sala = result[0].sala;
+					var inicio = result[0].inicio; 
+					db.close();
+					var duracao = fim - inicio;
+					console.log('ID: ' + idBd +'Inicio: ' + inicio);
+					
+					atualizarRanking(idBd,sessao,user1,user2,sala,inicio,fim,duracao);
+					
 	
+				});
+			});
+
+	}catch(e)
+		{ console.log(e.toString());}
+	}
+	});
 		/*Retorna o ranking com os melhores jogadores*/
 	socket.on('GET_RANKING',function(data){
 	console.log('Atualizando Ranking!');
 	MongoClient.connect(url, function(err, db) {
 	if (err) throw err;
-	db.collection("ranking360").find({}).sort({"duracao":-1}).limit(5).toArray(function(err, result) {
+	db.collection("ranking360").find({}).sort({"duracao":1}).limit(5).toArray(function(err, result) {
     if (err) throw err;
     
 	console.log(result);
@@ -285,16 +399,21 @@ io.on('connection', function(socket){
 		ranking:''
 		
 	}
-	for(i = 0; i < result.length;i++)
-		currentRetorno.ranking += "Tempo: " + result[1].duracao + " Jogadores: " + result[i].usuario1 + " e " + result[i].usuario2 + "#";
 	
+	for(i = 0; i < result.length;i++)
+	{
+		var dateTempo = new Date(result[i].duracao);
+
+		currentRetorno.ranking += "Tempo: "  + dateTempo.getMinutes() +":" + dateTempo.getSeconds() + " Jogadores: " + result[i].usuario1 + " e " + result[i].usuario2 + "#";
+	}
 	console.log(currentRetorno.ranking);
 	
 	socket.emit('ATUALIZA_RANKING',currentRetorno);
 	  });
 	});
 	});
-
+	
+	/*MÉTODO QUE RETIRA O CLIENTE DO SERVER*/
 	socket.on('SAIR',function(player){
 	console.log('Removendo jogador da sessão: ' + player.sessao);
 	try{

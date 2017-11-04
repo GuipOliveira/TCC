@@ -30,7 +30,7 @@ public class PlayerConnection : MonoBehaviour {
 
 
         btnEntrar.enabled = false;
-        inputFields = FindObjectsOfType(typeof(InputField)) as InputField[];
+       // inputFields = FindObjectsOfType(typeof(InputField)) as InputField[];
 
         canvas = GameObject.Find("Canvas");
         passaValor = GameObject.Find("PassaValor");
@@ -104,7 +104,8 @@ public class PlayerConnection : MonoBehaviour {
     {
         logar = true;
         PassaValor.entrar(inputFields[0].text, inputFields[1].text);//sala e usuario
-
+        Debug.Log("Sala: " + inputFields[0].text + " User: " + inputFields[1].text);
+      
     }
 
 

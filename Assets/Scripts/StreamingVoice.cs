@@ -26,6 +26,8 @@ public class StreamingVoice : MonoBehaviour
     void OnConnectedToMaster()
     {
         Debug.LogWarning("Conectado");
+        PhotonNetwork.JoinOrCreateRoom(PassaValor.sessao, new RoomOptions() { MaxPlayers = 2 }, null);
+        /*
 
         if (PassaValor.players == 1)
         {
@@ -38,7 +40,7 @@ public class StreamingVoice : MonoBehaviour
 
             PhotonNetwork.JoinRoom(PassaValor.sessao); //Segundo Player se junta a sala
 
-        }
+        }*/
 
     }
     public void OnJoinedRoom()

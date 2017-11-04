@@ -8,7 +8,7 @@ public class ApertaBotaoFinal : MonoBehaviour {
     public Shader _shader;
     public Shader _shaderLit;
     public Renderer _renderer;
-
+    public bool termino;
     void Start()
     {
         _renderer = gameObject.GetComponentInChildren<Renderer>();
@@ -27,7 +27,11 @@ public class ApertaBotaoFinal : MonoBehaviour {
     {
         if (ativo)
         {
-            PassaValor.numPorta = 5;
+            if (!termino)
+            {
+                PassaValor.numPorta = 5;
+                termino = true;
+            }
         }
     }
 

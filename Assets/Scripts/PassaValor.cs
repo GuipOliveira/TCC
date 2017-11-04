@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 //ing UnityEditor;
 using System.Net;
+using System.Threading;
 /*Esta classe passa valores entre cenas e outras classes e realiza comunicação com a classe JS do servidor via JSON*/
 public class PassaValor : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class PassaValor : MonoBehaviour
     public static bool vezMatriz; /*indica de quem é a vez para jogar no puzzle da matriz*/
     public static string posicaoSelecionadaMatriz; /*indica qual botão foi selecionado na Matriz*/
     public static string ranking;
-
+    public static int portasAbertas;
 
     // Use this for initialization
     void Start()
@@ -55,6 +56,7 @@ public class PassaValor : MonoBehaviour
 
     public static void sair()
     {
+     
         if (!string.IsNullOrEmpty(sessao) && !string.IsNullOrEmpty(id_player))
         {
             Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
@@ -62,17 +64,18 @@ public class PassaValor : MonoBehaviour
             data["id"] = id_player;
 
             socket.Emit("SAIR", new JSONObject(data));//RETIRANDO USER DO SERVER
+     
         }
     }
 
-    public static void entrar(string sessao, string name)
+    public static void entrar(string _sessao, string _name)
     {
-        if (!string.IsNullOrEmpty(sessao) && !string.IsNullOrEmpty(name))
+        if (!string.IsNullOrEmpty(_sessao) && !string.IsNullOrEmpty(_name))
         {
-
+            Debug.LogWarning("Player conectando: " + _name + " Na sala: " + _sessao);
             Dictionary<string, string> data = new Dictionary<string, string>();//pacote JSON
-            data["sessao"] = sessao;
-            data["id"] = name;
+            data["sessao"] = _sessao;
+            data["name"] = _name;
 
             socket.Emit("LOGIN", new JSONObject(data));//solicitando login ao servidor
 
@@ -118,13 +121,75 @@ public class PassaValor : MonoBehaviour
 
     static void OnLoginSucess(SocketIOEvent _myPlayer)
     {
-
+        
         players = int.Parse(JsonToString2(_myPlayer.data.GetField("players").ToString(), "\"")); //recebe a quantidade de players no servidor
         id_player = JsonToString(_myPlayer.data.GetField("id").ToString(), "\"");
         sessao = JsonToString(_myPlayer.data.GetField("sessao").ToString(), "\"");
+        portasAbertas = int.Parse(JsonToString(_myPlayer.data.GetField("portasAbertas").ToString(), "\""));
         Debug.LogWarning("Conectado a sessão: " +sessao);
 
+        
+
     }
+
+    public static void abrirPortas()
+    {
+        int portas = PassaValor.portasAbertas;
+        for(int i = 1; i <= portas; i++)
+        {
+            if (i == 1)
+            {
+                Debug.LogWarning("Abrindo porta: " + i);
+                GameObject porta = GameObject.Find("PortaGO (1)");
+                porta.GetComponent<ControlaPortaAnimacao>();
+
+                ControlaPortaAnimacao cpa = porta.GetComponent<ControlaPortaAnimacao>();
+                cpa.ativar = true;
+            }else if(i == 2)
+            {
+                Debug.LogWarning("Abrindo porta: " + i);
+                GameObject porta = GameObject.Find("PortaGO (2)");
+                porta.GetComponent<ControlaPortaAnimacao>();
+
+                ControlaPortaAnimacao cpa = porta.GetComponent<ControlaPortaAnimacao>();
+                cpa.ativar = true;
+            }
+            else if (i == 3)
+            {
+                Debug.LogWarning("Abrindo porta: " + i);
+                GameObject porta = GameObject.Find("PortaGO (3)");
+                porta.GetComponent<ControlaPortaAnimacao>();
+
+                ControlaPortaAnimacao cpa = porta.GetComponent<ControlaPortaAnimacao>();
+                cpa.ativar = true;
+            }
+            else if (i == 4)
+            {
+                Debug.LogWarning("Abrindo porta: " + i);
+                GameObject porta = GameObject.Find("PortaGO (4)");
+                porta.GetComponent<ControlaPortaAnimacao>();
+
+                ControlaPortaAnimacao cpa = porta.GetComponent<ControlaPortaAnimacao>();
+                cpa.ativar = true;
+            }
+            else if (i == 5)
+            {
+                Debug.LogWarning("Abrindo porta: " + i);
+                GameObject porta = GameObject.Find("PortaGO (5)");
+                porta.GetComponent<ControlaPortaAnimacao>();
+
+                ControlaPortaAnimacao cpa = porta.GetComponent<ControlaPortaAnimacao>();
+                cpa.ativar = true;
+            }
+            else if (i == 6)
+            {
+                GameObject vidro = GameObject.Find("Vidro");
+                Destroy(vidro);
+            }
+        }
+       
+    }
+
 
     static void receberOBJ(SocketIOEvent _obj)
     {
@@ -179,6 +244,21 @@ public class PassaValor : MonoBehaviour
                 numPorta = _numPorta; //porta que será aberta
                 
             }
+        }
+    }
+    public static void finalGame()
+    {
+        if (!string.IsNullOrEmpty(id_player))
+        {
+            Debug.LogWarning("Game Finalizado! " + id_player);
+            Dictionary<string, string> player = new Dictionary<string, string>();//pacote JSON]
+
+            player["id"] = id_player;
+            player["sessao"] = sessao;
+
+            socket.Emit("ULTIMA_PORTA", new JSONObject(player));
+
+
         }
     }
 

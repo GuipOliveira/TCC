@@ -27,7 +27,7 @@ public class Sala : MonoBehaviour
 
         addObj();//adiciona os objetos ao vetor
 
-
+        PassaValor.abrirPortas();
 
     }
 
@@ -164,11 +164,12 @@ public class Sala : MonoBehaviour
 
             ControlaPortaAnimacao cpa = porta.GetComponent<ControlaPortaAnimacao>();
             cpa.ativar = true;
-
+            /* Sem necessidade de passar para outro lado, basta finalizar o game
             if (!PassaValor.sinalRecebido)
             {
                 PassaValor.enviaSinalPorta(numPorta);
-            }
+            }*/
+            PassaValor.finalGame();
             PassaValor.sinalRecebido = false;
             PassaValor.numPorta = -1;
         }
@@ -203,8 +204,9 @@ public class Sala : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        Debug.LogWarning("Saindo");
         PassaValor.sair();
+        Debug.LogWarning("Saindo");
+        
     }
 
 
