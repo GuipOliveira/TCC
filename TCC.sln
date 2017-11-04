@@ -1,7 +1,13 @@
 ﻿
+<<<<<<< HEAD
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCC", "Assembly-CSharp.csproj", "{7A882426-787D-DCA5-5B08-6331B10C6A19}"
+=======
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCC", "TCC.csproj", "{6EBCEFDD-A7A0-DB43-6C48-2D18D906F302}"
+>>>>>>> d9a8aa48d3d0f503667c0cdfbef0de7cdeec57c2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCC", "Assembly-CSharp-firstpass.csproj", "{979497AD-5934-F391-B509-6E6F7218A36C}"
 EndProject
