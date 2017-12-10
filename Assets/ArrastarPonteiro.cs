@@ -22,7 +22,7 @@ public class ArrastarPonteiro : MonoBehaviour {
             hit = hitInfo;
             if (getTarget != null)
             {
-                getTarget.transform.Rotate(Vector3.right , -hit.point.x);
+                getTarget.transform.Rotate(Vector3.right , -hit.point.x * (Time.deltaTime * 15));
             }
 
         }
@@ -36,8 +36,9 @@ public class ArrastarPonteiro : MonoBehaviour {
     {
         Ponteiro target = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray.origin, ray.direction * 20, out hit, 40))
+        if (Physics.Raycast(ray.origin, ray.direction * 5, out hit, 40))
         {
+            Debug.Log(hit.transform.name);
             target = hit.transform.GetComponent<Ponteiro>();
         }
         return target;
