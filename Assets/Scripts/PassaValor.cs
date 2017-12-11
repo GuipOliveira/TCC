@@ -250,6 +250,8 @@ public class PassaValor : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(id_player))
         {
+            Debug.Log("Carrega cena final!");
+            SceneManager.LoadScene("Assets/Final.unity", LoadSceneMode.Additive); //carrega sala
             Debug.LogWarning("Game Finalizado! " + id_player);
             Dictionary<string, string> player = new Dictionary<string, string>();//pacote JSON]
 

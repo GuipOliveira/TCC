@@ -172,6 +172,7 @@ public class Sala : MonoBehaviour
             PassaValor.finalGame();
             PassaValor.sinalRecebido = false;
             PassaValor.numPorta = -1;
+
         }
         else if (numPorta == 6)
         {
